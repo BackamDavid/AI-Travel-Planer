@@ -4,81 +4,81 @@ const ItineraryView = ({ data }) => {
   const { destination, days, itinerary, estimated_cost, destination_info, travelers } = data;
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
-        <h1 className="text-3xl font-bold mb-2">
-          ✈️ {days}-Day Trip to {destination}
-        </h1>
-        <div className="flex items-center justify-between">
-          <p className="text-blue-100">
+    <div className="space-y-10 px-4 md:px-10">
+
+      {/* Hero Section */}
+      <div className="relative rounded-2xl overflow-hidden shadow-lg">
+        <img
+          src={`https://source.unsplash.com/1600x400/?${destination},travel`}
+          alt={destination}
+          className="w-full h-64 object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60 flex flex-col justify-center px-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+            ✈️ {days}-Day Trip to {destination}
+          </h1>
+          <p className="text-white/80">
             {destination_info?.attractions?.length || 0} attractions • {estimated_cost ? `$${estimated_cost}` : 'Cost varies'}
           </p>
-          <button className="bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100">
-            Save Itinerary
-          </button>
         </div>
       </div>
 
       {/* Destination Info */}
       {destination_info && (
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">About {destination}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-semibold text-gray-700 mb-2">Top Attractions</h4>
-              <ul className="space-y-2">
-                {destination_info.attractions?.slice(0, 5).map((att, idx) => (
-                  <li key={idx} className="flex items-center">
-                    <span className="mr-2">🏛️</span>
-                    {att}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-700 mb-2">Local Tips</h4>
-              <p className="text-gray-600">
-                {destination_info.weather || 'Perfect weather for exploration!'}
-              </p>
-            </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Top Attractions</h3>
+            <ul className="space-y-2">
+              {destination_info.attractions?.slice(0, 5).map((att, idx) => (
+                <li key={idx} className="flex items-center text-gray-700">
+                  <span className="mr-2 text-blue-600">🏛️</span>
+                  {att}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Local Tips</h3>
+            <p className="text-gray-600">{destination_info.weather || 'Perfect weather for exploration!'}</p>
           </div>
         </div>
       )}
 
       {/* Itinerary */}
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-gray-900">Your Itinerary</h2>
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">Your Itinerary</h2>
 
         {itinerary?.structured?.map((day, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="bg-gray-50 px-6 py-4 border-b">
-              <h3 className="text-xl font-bold text-gray-900">{day.day}</h3>
+          <div
+            key={index}
+            className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl shadow-lg overflow-hidden"
+          >
+            <div className="bg-indigo-100/60 px-6 py-3 border-b">
+              <h3 className="text-xl font-bold text-gray-900">Day {day.day}: {day.theme} (Est. ${day.estimated_cost})</h3>
             </div>
-            <div className="p-6">
-              <ul className="space-y-4">
-                {day.activities?.map((activity, idx) => (
-                  <li key={idx} className="flex items-start">
-                    <div className="flex-shrink-0 w-24 text-sm font-semibold text-blue-600 pt-1">
-                      {activity.time}
-                    </div>
-                    <div className="flex-grow">
-                      <h4 className="text-gray-900 font-bold">{activity.title}</h4>
-                      <p className="text-gray-600 text-sm mt-1">{activity.description}</p>
-                      {activity.cost > 0 && (
-                        <span className="inline-block mt-2 text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">
-                          Est. Cost: ${activity.cost}
-                        </span>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
+            <div className="p-6 space-y-4">
+              {day.activities?.map((activity, idx) => (
+                <div key={idx} className="flex items-start">
+                  <div className="flex-shrink-0 w-24 text-sm font-semibold text-indigo-600 pt-1">
+                    {activity.time}
+                  </div>
+                  <div className="flex-grow">
+                    <h4 className="text-gray-900 font-bold">{activity.title}</h4>
+                    <p className="text-gray-600 text-sm mt-1">{activity.description}</p>
+                    {activity.cost > 0 && (
+                      <span className="inline-block mt-2 text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">
+                        Est. Cost: ${activity.cost}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {day.notes && <p className="text-gray-500 italic">Note: {day.notes}</p>}
             </div>
           </div>
         ))}
 
-        {/* Raw text fallback */}
+        {/* Fallback text */}
         {!itinerary?.structured && itinerary?.text && (
           <div className="bg-white rounded-xl shadow-lg p-6">
             <pre className="whitespace-pre-wrap text-gray-700">{itinerary.text}</pre>
@@ -101,11 +101,11 @@ const ItineraryView = ({ data }) => {
       )}
 
       {/* Actions */}
-      <div className="flex space-x-4">
-        <button className="flex-1 bg-white border border-blue-600 text-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-50">
+      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+        <button className="flex-1 bg-white border border-indigo-600 text-indigo-600 py-3 rounded-lg font-semibold hover:bg-indigo-50">
           Download PDF
         </button>
-        <button className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
+        <button className="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700">
           Share with Friends
         </button>
       </div>

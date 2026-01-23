@@ -42,7 +42,7 @@ const TripForm = ({ onSubmit, loading }) => {
           value={formData.destination}
           onChange={(e) => setFormData({...formData, destination: e.target.value})}
           placeholder="Where do you want to go?"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white/90 placeholder-gray-400"
         />
       </div>
 
@@ -58,7 +58,7 @@ const TripForm = ({ onSubmit, loading }) => {
             max="30"
             value={formData.days}
             onChange={(e) => setFormData({...formData, days: parseInt(e.target.value)})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 bg-white/90"
           />
         </div>
         
@@ -69,7 +69,7 @@ const TripForm = ({ onSubmit, loading }) => {
           <select
             value={formData.travelers}
             onChange={(e) => setFormData({...formData, travelers: parseInt(e.target.value)})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 bg-white/90"
           >
             {[1,2,3,4,5,6].map(num => (
               <option key={num} value={num}>{num} {num === 1 ? 'person' : 'people'}</option>
@@ -92,7 +92,7 @@ const TripForm = ({ onSubmit, loading }) => {
               className={`flex-1 py-3 rounded-lg border ${
                 formData.budget === level
                   ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-gray-100 text-gray-700 border-gray-300'
+                  : 'bg-gray-100 text-gray-900 border-gray-300'
               }`}
             >
               {level.charAt(0).toUpperCase() + level.slice(1)}
@@ -115,7 +115,7 @@ const TripForm = ({ onSubmit, loading }) => {
               className={`px-4 py-2 rounded-full border ${
                 formData.interests.includes(interest)
                   ? 'bg-purple-100 text-purple-700 border-purple-300'
-                  : 'bg-gray-100 text-gray-700 border-gray-300'
+                  : 'bg-gray-100 text-gray-900 border-gray-300'
               }`}
             >
               {interest}
