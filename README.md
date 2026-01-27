@@ -58,3 +58,13 @@ The application will be available at `http://localhost:3000`.
 
 - **CORS Issues**: Ensure the backend `main.py` has your frontend origin in the `allow_origins` list.
 - **Ollama Connection**: Ensure Ollama is running (`ollama serve`) and the `phi3:mini` model is pulled before starting the backend.
+
+## Project Previews
+
+<div align="center">
+  <img src="frontend/src/assets/a.gif" width="32%" />
+  <img src="frontend/src/assets/b.gif" width="32%" />
+  <img src="frontend/src/assets/c.gif" width="32%" />
+</div>
+
+
