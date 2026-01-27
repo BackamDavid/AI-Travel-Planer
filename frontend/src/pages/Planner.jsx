@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import TripForm from "../components/TripForm";
 import ItineraryView from "../components/ItineraryView";
+import vBg from "../assets/v.jpg";
 
 const Planner = () => {
     const [itinerary, setItinerary] = useState(null);
@@ -30,9 +31,9 @@ const Planner = () => {
             {/* Background image - Fixed to ensure it covers scrolling content */}
             <div className="fixed inset-0 z-0">
                 <img
-                    src={`https://source.unsplash.com/1600x900/?travel,map,journey`}
+                    src={vBg}
                     alt="Travel Background"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover opacity-60 scale-105 animate-slow-zoom"
                 />
                 <div className="absolute inset-0 bg-black/60"></div>
             </div>
@@ -41,7 +42,7 @@ const Planner = () => {
             <div className="relative z-20 max-w-7xl mx-auto px-6 pt-32 pb-12 text-white">
                 {/* Header */}
                 <header className="text-center mb-16 animate-fade-in-down">
-                    <h1 className="text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+                    <h1 className="text-5xl font-extrabold tracking-tight text-white">
                         Plan Your Adventure
                     </h1>
                     <p className="mt-4 text-lg text-gray-200 chat-bubble">
@@ -54,7 +55,7 @@ const Planner = () => {
                     <div className="lg:col-span-4 h-fit sticky top-24">
                         <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
                             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-                                <span>🧳</span> Trip Details
+                                <span></span> Trip Details
                             </h2>
                             <TripForm onSubmit={handlePlanSubmit} loading={loading} />
 
@@ -76,7 +77,7 @@ const Planner = () => {
                                         onClick={() => setItinerary(null)}
                                         className="px-6 py-2 rounded-full bg-white/20 hover:bg-white/30 transition text-sm font-medium"
                                     >
-                                        🔁 Plan Another Trip
+                                        Plan Another Trip
                                     </button>
                                 </div>
                             </div>

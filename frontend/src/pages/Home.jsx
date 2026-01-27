@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import bgImage from '../assets/1.jpg';
 
 const Home = () => {
+
     return (
-        <div className="min-h-screen bg-black text-white selection:bg-purple-500 selection:text-white">
+        <div className="min-h-screen bg-black text-white selection:text-white animate-fade-in">
 
             {/* Hero Section */}
             <section className="relative h-screen flex items-center justify-center overflow-hidden">
                 {/* Background Image with Overlay */}
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://source.unsplash.com/1920x1080/?travel,earth,ocean"
+                        src={bgImage}
                         alt="Hero Background"
                         className="w-full h-full object-cover opacity-50 scale-105 animate-slow-zoom"
                     />
@@ -20,11 +22,11 @@ const Home = () => {
                 {/* Content */}
                 <div className="relative z-10 text-center px-6 max-w-5xl mx-auto space-y-8 animate-fade-in-up">
                     <div className="inline-block px-4 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-sm font-medium tracking-wide mb-4 text-blue-200">
-                        ✨ Experience the Future of Travel
+                        Experience the Future of Travel
                     </div>
                     <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight">
                         Discover the World <br />
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
+                        <span className="text-white">
                             Without the Stress
                         </span>
                     </h1>
@@ -34,14 +36,11 @@ const Home = () => {
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
                         <Link
-                            to="/planner"
-                            className="px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition-all transform hover:scale-105 shadow-lg shadow-blue-500/30 flex items-center gap-2"
+                            to="/destinations"
+                            className="px-8 py-4 rounded-full bg-black hover:bg-white/10 text-white border border-white/20 font-bold text-lg transition-all transform hover:scale-105 shadow-xl shadow-white/5 flex items-center gap-2"
                         >
-                            Start Your Journey 🚀
+                            Start Your Journey
                         </Link>
-                        <button className="px-8 py-4 rounded-full border border-white/30 hover:bg-white/10 text-white font-semibold text-lg transition-all backdrop-blur-sm">
-                            Watch Demo
-                        </button>
                     </div>
                 </div>
             </section>
@@ -58,17 +57,14 @@ const Home = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <FeatureCard
-                            icon="🤖"
                             title="Smart AI Planning"
                             desc="Forget generic lists. Get a plan that actually fits your schedule and style."
                         />
                         <FeatureCard
-                            icon="💰"
                             title="Budget Optimization"
                             desc="We help you get the most out of every dollar, from luxury stays to hidden gems."
                         />
                         <FeatureCard
-                            icon="🌍"
                             title="Global coverage"
                             desc="Whether it’s Tokyo, Paris, or a small village in Italy, we’ve got you covered."
                         />

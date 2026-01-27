@@ -26,6 +26,13 @@ class TravelRequest(BaseModel):
     interests: List[str] = []
     travelers: int = 2
 
+class DestinationSuggestionRequest(BaseModel):
+    interest: str
+
+class DistrictSuggestionRequest(BaseModel):
+    country: str
+    interest: str
+
 # ---------- Mock destination info ----------
 MOCK_DATA = {
     "Paris": {
@@ -67,6 +74,53 @@ async def plan_trip(request: TravelRequest):
         return {"success": False, "error": str(e)}
 
 
+@app.post("/suggest_destinations")
+async def suggest_destinations(request: DestinationSuggestionRequest):
+    """
+    Suggests 5 countries based on interest.
+    """
+    try:
+        prompt = f"""
+You are a travel expert. Suggest top 5 countries for a traveler interested in: "{request.interest}".
+Return ONLY a JSON object with this valid field:
+"suggestions": [
+  {{"country": "Country Name", "reason": "Short reason why", "flag": "🇺🇸"}},
+  ...
+]
+Do NOT return markdown. return ONLY JSON.
+"""
+        raw = _ollama_generate(prompt, seed=42)
+        data = _extract_json_object(raw)
+        return {"success": True, "suggestions": data.get("suggestions", [])}
+    except Exception as e:
+        print(traceback.format_exc())
+        return {"success": False, "error": str(e)}
+
+
+@app.post("/suggest_districts")
+async def suggest_districts(request: DistrictSuggestionRequest):
+    """
+    Suggests 4-5 districts or cities within a specific country for the interest.
+    """
+    try:
+        prompt = f"""
+You are a travel expert. The user selected "{request.country}" for "{request.interest}".
+Suggest top 4 specific districts, cities, or regions in {request.country} that fit this interest.
+Return ONLY a JSON object with this valid field:
+"suggestions": [
+  {{"name": "District/City Name", "description": "Why it's great", "image_keyword": "search term for unsplash"}},
+  ...
+]
+Do NOT return markdown. return ONLY JSON.
+"""
+        raw = _ollama_generate(prompt, seed=123)
+        data = _extract_json_object(raw)
+        return {"success": True, "suggestions": data.get("suggestions", [])}
+    except Exception as e:
+        print(traceback.format_exc())
+        return {"success": False, "error": str(e)}
+
+
 async def get_destination_data(destination: str):
     # Use mock for now
     return MOCK_DATA.get(destination, {
@@ -77,50 +131,72 @@ async def get_destination_data(destination: str):
 
 
 def _extract_json_object(text: str) -> dict:
-    """
-    Tries to reliably extract the first JSON object from model output.
-    Handles extra text before/after JSON.
-    """
     if not text:
         raise ValueError("Empty model response")
 
-    # First attempt: direct parse
+    text = text.strip()
+
+    # 1) direct parse
     try:
         return json.loads(text)
     except Exception:
         pass
 
-    # Try to find the first {...} block (including newlines)
-    match = re.search(r"\{.*\}", text, flags=re.DOTALL)
-    if not match:
+    # 2) balanced braces scan (safe)
+    start = text.find("{")
+    if start == -1:
         raise ValueError("No JSON object found in model output")
 
-    candidate = match.group(0).strip()
+    depth = 0
+    in_str = False
+    escape = False
 
-    # Remove trailing garbage after last brace if any
-    last = candidate.rfind("}")
-    candidate = candidate[: last + 1]
+    for i in range(start, len(text)):
+        ch = text[i]
 
-    return json.loads(candidate)
+        if in_str:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_str = False
+            continue
+
+        if ch == '"':
+            in_str = True
+            continue
+
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                candidate = text[start:i+1]
+                return json.loads(candidate)
+
+    raise ValueError("JSON braces not closed / invalid JSON from model")
 
 
-def _ollama_generate(prompt: str) -> str:
+
+def _ollama_generate(prompt: str, seed: int) -> str:
     r = requests.post(
         "http://localhost:11434/api/generate",
         headers={"Content-Type": "application/json"},
         json={
-            "model": "llama3.1:8b-instruct-q4_K_M",
+            "model": "phi3:mini",
             "prompt": prompt,
             "stream": False,
-            "format": "json",  # helps, but model can still break it sometimes
+            "format": "json",   # ✅ IMPORTANT: force JSON
             "options": {
-                "temperature": 0.7,
+                "temperature": 0.4,
                 "top_p": 0.9,
-                "num_predict": 250,
-                "num_thread": 4
+                "num_predict": 450,
+                "num_thread": 4,
+                "seed": seed      # ✅ IMPORTANT: different output per day
             }
         },
-        timeout=180
+        timeout=120
     )
 
     if r.status_code != 200:
@@ -128,6 +204,7 @@ def _ollama_generate(prompt: str) -> str:
 
     data = r.json()
     return (data.get("response") or "").strip()
+
 
 
 async def generate_itinerary_with_ollama(request: TravelRequest, destination_info: dict):
@@ -194,7 +271,7 @@ Return JSON EXACTLY in this format:
 }}
 """
 
-        raw = _ollama_generate(prompt)
+        raw = _ollama_generate(prompt, seed=1000 + day_num)
 
         # Parse JSON (robust)
         try:
@@ -202,7 +279,7 @@ Return JSON EXACTLY in this format:
         except Exception:
             # One retry with stricter instruction if model misbehaves
             retry_prompt = prompt + "\n\nIMPORTANT: Return ONLY JSON. Do not add any commentary."
-            raw2 = _ollama_generate(retry_prompt)
+            raw2 =_ollama_generate(retry_prompt, seed=2000 + day_num)
             day_obj = _extract_json_object(raw2)
 
         # Normalize output

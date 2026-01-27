@@ -1,26 +1,27 @@
 # Python
 __pycache__/
 *.pyc
-venv/
+*.pyo
+*.pyd
 .venv/
+venv/
 
 # Node
 node_modules/
-**/node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-
-# caches/build
-**/.cache/
-**/.vite/
 dist/
 build/
+
+# Vite / React cache
+frontend/node_modules/.cache/
+frontend/.vite/
+.vite/
 
 # OS
 .DS_Store
 
-# env
+# Env files
 .env
-

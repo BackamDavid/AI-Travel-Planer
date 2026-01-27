@@ -31,7 +31,7 @@ const ItineraryView = ({ data }) => {
             <ul className="space-y-2">
               {destination_info.attractions?.slice(0, 5).map((att, idx) => (
                 <li key={idx} className="flex items-center text-gray-700">
-                  <span className="mr-2 text-blue-600">🏛️</span>
+                  <span className="mr-2 text-secondary">🏛️</span>
                   {att}
                 </li>
               ))}
@@ -51,22 +51,22 @@ const ItineraryView = ({ data }) => {
         {itinerary?.structured?.map((day, index) => (
           <div
             key={index}
-            className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl shadow-lg overflow-hidden"
+            className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
           >
-            <div className="bg-indigo-100/60 px-6 py-3 border-b">
+            <div className="bg-secondary/10 px-6 py-3 border-b">
               <h3 className="text-xl font-bold text-gray-900">Day {day.day}: {day.theme} (Est. ${day.estimated_cost})</h3>
             </div>
             <div className="p-6 space-y-4">
               {day.activities?.map((activity, idx) => (
                 <div key={idx} className="flex items-start">
-                  <div className="flex-shrink-0 w-24 text-sm font-semibold text-indigo-600 pt-1">
+                  <div className="flex-shrink-0 w-24 text-sm font-semibold text-secondary pt-1">
                     {activity.time}
                   </div>
                   <div className="flex-grow">
                     <h4 className="text-gray-900 font-bold">{activity.title}</h4>
                     <p className="text-gray-600 text-sm mt-1">{activity.description}</p>
                     {activity.cost > 0 && (
-                      <span className="inline-block mt-2 text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">
+                      <span className="inline-block mt-2 text-xs font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded">
                         Est. Cost: ${activity.cost}
                       </span>
                     )}
@@ -88,11 +88,11 @@ const ItineraryView = ({ data }) => {
 
       {/* Cost Summary */}
       {estimated_cost && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
           <h3 className="text-lg font-bold text-gray-900 mb-2">💰 Estimated Cost</h3>
           <div className="flex items-center justify-between">
             <p className="text-gray-700">Total for {travelers} travelers × {days} days:</p>
-            <p className="text-3xl font-bold text-green-600">${estimated_cost}</p>
+            <p className="text-3xl font-bold text-black">${estimated_cost}</p>
           </div>
           <p className="text-sm text-gray-500 mt-2">
             Includes activities, food, and local transportation
@@ -101,11 +101,14 @@ const ItineraryView = ({ data }) => {
       )}
 
       {/* Actions */}
-      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-        <button className="flex-1 bg-white border border-indigo-600 text-indigo-600 py-3 rounded-lg font-semibold hover:bg-indigo-50">
+      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 no-print">
+        <button
+          onClick={() => window.print()}
+          className="flex-1 bg-white border border-black text-black py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
           Download PDF
         </button>
-        <button className="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700">
+        <button className="flex-1 bg-black text-white py-3 rounded-lg font-semibold hover:bg-black/90 transition-colors border border-black">
           Share with Friends
         </button>
       </div>

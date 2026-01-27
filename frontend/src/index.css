@@ -7,6 +7,12 @@
     background-image: url("./assets/travel.jpg");
   }
 
+  ::selection {
+    background-color: #333333;
+    /* Neutral Dark Gray */
+    color: white;
+  }
+
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out forwards;
   }
@@ -72,4 +78,142 @@ body {
   margin: 0;
   font-family: 'Inter', system-ui, sans-serif;
   background-color: #000;
+}
+
+@keyframes wander {
+  0% {
+    transform: translateX(-20vw) translateY(50px) scale(0.8) rotate(-5deg);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+    transform: translateX(10vw) translateY(-20px) scale(1) rotate(5deg);
+  }
+
+  50% {
+    transform: translateX(40vw) translateY(30px) scale(1.1) rotate(-5deg);
+  }
+
+  80% {
+    opacity: 1;
+    transform: translateX(70vw) translateY(-10px) scale(1) rotate(5deg);
+  }
+
+  100% {
+    transform: translateX(110vw) translateY(40px) scale(0.9) rotate(-5deg);
+    opacity: 0;
+  }
+}
+
+.animate-wander {
+  animation: wander 4s ease-in-out forwards;
+}
+
+@media print {
+
+  .no-print,
+  button,
+  nav,
+  footer,
+  header {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  .text-white {
+    color: black !important;
+  }
+
+  /* Reset container widths and margins for print */
+  .max-w-7xl,
+  .max-w-6xl,
+  .max-w-4xl {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .grid {
+    display: block !important;
+  }
+
+  .lg\:col-span-8 {
+    width: 100% !important;
+  }
+
+  /* Clean up cards for print - remove dark mode effects */
+  .bg-white\/10,
+  .bg-white\/5,
+  .backdrop-blur-xl,
+  .bg-gradient-to-r {
+    background: none !important;
+    backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Itinerary Days - Better Separation */
+  .space-y-6>div {
+    break-inside: avoid;
+    border: 1px solid #ccc !important;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 0 !important;
+    /* Let inner padding handle it */
+    background-color: #fff !important;
+  }
+
+  /* Day Header */
+  .bg-secondary\/10 {
+    background-color: #f3f4f6 !important;
+    /* Light gray for print */
+    border-bottom: 1px solid #ddd;
+    color: black !important;
+  }
+
+  /* Text Colors */
+  .text-gray-900,
+  .text-gray-600,
+  .text-gray-400,
+  .text-gray-300 {
+    color: black !important;
+  }
+
+  .text-secondary {
+    color: #2E7D32 !important;
+    /* Printable Green */
+  }
+
+  /* Hero Section Image - clean up */
+  img {
+    max-height: 200px;
+    object-fit: cover;
+    opacity: 1 !important;
+  }
+
+  /* Cost Summary */
+  .bg-green-50 {
+    background-color: #fff !important;
+    border: 2px solid #2E7D32 !important;
+  }
+
+  /* Page Break Rules */
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  /* Force background graphics just in case */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 }
