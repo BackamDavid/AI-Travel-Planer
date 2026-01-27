@@ -1,17 +1,17 @@
-# ✈️ AI Travel Planner
+# AI Travel Planner
 
-A premium, AI-powered travel itinerary generator built with **FastAPI** and **React**. This application uses OpenAI's GPT-4o-mini to craft personalized day-by-day travel plans based on your destination, budget, and interests.
+A premium, AI-powered travel itinerary generator built with **FastAPI** and **React**. This application uses a **Local LLM via Ollama (phi3:mini)** to craft personalized day-by-day travel plans based on your destination, budget, and interests.
 
-## ✨ Features
+##  Features
 
 - **Intelligent Planning**: Generates structured itineraries with morning, afternoon, and evening activities.
 - **Cost Estimation**: Provides daily and total budget estimates based on your travel style (Budget, Midrange, Luxury).
 - **Responsive Design**: Modern, glassmorphism UI built with Tailwind CSS.
-- **Real-time Integration**: Pulls live data and suggestions using OpenAI's structured outputs.
+- **Real-time Integration**: Pulls live suggestions and structured data using a local inference engine.
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Backend Setup (FastAPI)
 
@@ -24,10 +24,10 @@ source venv/bin/activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Configure environment variables
-# Create a .env file in the backend directory:
-# OPENAI_API_KEY=your_key_here
-# GOOGLE_PLACES_KEY=your_key_here
+# Configure Ollama
+# 1. Install Ollama from ollama.com
+# 2. Pull the required model:
+ollama pull phi3:mini
 
 # Start the server
 python main.py
@@ -48,13 +48,13 @@ The application will be available at `http://localhost:3000`.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
-- **Backend**: Python, FastAPI, OpenAI SDK, Pydantic, Uvicorn.
+- **Backend**: Python, FastAPI, Requests, Pydantic, Uvicorn.
 - **Frontend**: React, Tailwind CSS, Axios, Lucide React (optional).
-- **AI Model**: GPT-4o-mini (JSON mode).
+- **AI Model**: Local LLM via Ollama (phi3:mini).
 
-## 📝 Troubleshooting
+##  Troubleshooting
 
 - **CORS Issues**: Ensure the backend `main.py` has your frontend origin in the `allow_origins` list.
-- **API Key**: If the itinerary generation returns identical "fallback" data, verify that your `OPENAI_API_KEY` in `.env` is valid and the backend has been restarted.
+- **Ollama Connection**: Ensure Ollama is running (`ollama serve`) and the `phi3:mini` model is pulled before starting the backend.
